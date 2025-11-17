@@ -16,8 +16,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'  # Use your preferred Node.js version
-
+          node-version: '22'
       - name: Install wrangler CLI
         run: |
           npm install -g wrangler
