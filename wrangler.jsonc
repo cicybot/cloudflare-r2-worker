@@ -9,7 +9,13 @@
 	"compatibility_date": "2025-11-15",
 	"observability": {
 		"enabled": true
-	}
+	},
+	  "r2_buckets": [
+		{
+		"binding": "R2",
+		"bucket_name": "storage"
+		}
+	],
 	/**
 	 * Smart Placement
 	 * Docs: https://developers.cloudflare.com/workers/configuration/smart-placement/#smart-placement
