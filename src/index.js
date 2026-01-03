@@ -1,6 +1,6 @@
 
 function authorizeRequest(request, env, key) {
-	return request.headers.get("X-Custom-Auth-Key") === env.STORAGE_AUTH_KEY_SECRET;
+	return request.headers.get("X-Custom-Auth-Key") === env.`STORAGE_AUTH_KEY_SECRET`;
 }
 
 export default {
@@ -8,12 +8,12 @@ export default {
     const url = new URL(request.url);
     const key = url.pathname.slice(1);
 
-	if (!authorizeRequest(request, env, key)) {
-		return new Response("Forbidden", { status: 403 });
-	}
 
     switch (request.method) {
       case "PUT": {
+        if (!authorizeRequest(request, env, key)) {
+          return new Response("Forbidden", { status: 403 });
+        }
         await env.R2.put(key, request.body, {
           onlyIf: request.headers,
           httpMetadata: request.headers,
