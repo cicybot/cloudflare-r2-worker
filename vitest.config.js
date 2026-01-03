@@ -1,7 +1,6 @@
-import { defineWorkersConfig } from '@cloudflare/vitest-pool-workers/config';
-import { loadEnv } from 'vite';
+import { loadEnv,defineConfig } from 'vite';
 
-export default defineWorkersConfig(({ mode }) => {
+export default defineConfig(({ mode }) => {
 	const env = loadEnv(mode, process.cwd(), '');
 	return {
 		test: {

@@ -15,16 +15,12 @@ export default {
           return new Response("Forbidden", { status: 403 });
         }
         await env.R2.put(key, request.body, {
-          onlyIf: request.headers,
           httpMetadata: request.headers,
         });
         return new Response(`Put ${key} successfully!`);
       }
       case "GET": {
-        const object = await env.R2.get(key, {
-          onlyIf: request.headers,
-          range: request.headers,
-        });
+        const object = await env.R2.get(key);
 
         if (object === null) {
           return new Response("Object Not Found", { status: 404 });

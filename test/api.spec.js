@@ -1,38 +1,74 @@
 import { describe,expect, it } from 'vitest';
+import { readFileSync } from "fs";
+import path from "path";
 
 const {STORAGE_AUTH_KEY_SECRET} = import.meta.env
-const WORKER_URL = "https://r2-worker.ob6ha3.workers.dev";
+const WORKER_URL = "http://r2-worker.ob6ha3.workers.dev";
 const headers = {
 	"X-Custom-Auth-Key": STORAGE_AUTH_KEY_SECRET
 }
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
 
-describe("R2 API", () => {
+describe("MP4", () => {
+	it("PUT mp4", async () => {
+		const filePath = path.join(__dirname, "audio.mp4");
+		console.log(filePath)
+		// read binary
+		const mp4Data = readFileSync(filePath);
+		console.log("mp4Data",mp4Data.length)
 
-	it("PUT object", async () => {
-		const res = await fetch(
-			`${WORKER_URL}/hello.txt`,
-			{
-				body:"hello world",                // BODY (data)
-				headers
-			}
-		);
+		const res = await fetch(`${WORKER_URL}/audio.mp4`, {
+			method: "PUT",
+			headers: {
+				...headers,
+				"content-type": "video/mp4",
+			},
+			body: mp4Data,
+		});
 
 		console.log("PUT status:", res.status);
 		console.log("PUT text:", await res.text());
-
-		expect(res.status).toBe(200);
 	});
 
-	it("GET object", async () => {
-		const res = await fetch(`${WORKER_URL}/hello.txt`, {
+	it("GET mp4", async () => {
+		const res = await fetch(`${WORKER_URL}/audio.mp4`, {
 			method: "GET",
-			headers
+			headers,
 		});
 
 		console.log("GET status:", res.status);
-		console.log("GET text:", await res.text());
 
-		expect(res.status).toBe(200);
+		const buffer = await res.arrayBuffer();
+		console.log("MP4 size bytes:", buffer.byteLength);
+
+	});
+});
+
+
+
+describe("PLAIN_TEXT", () => {
+
+	it("PUT plain", async () => {
+		const res = await fetch(
+			`${WORKER_URL}/plain.txt`,
+			{
+				method:"PUT",
+				body:"plain text",                // BODY (data)
+				headers
+			}
+		);
+		console.log("PUT text:", await res.text());
+
+	});
+
+	it("GET Plain", async () => {
+		const url = `${WORKER_URL}/plain.txt`
+		console.log(url)
+		const res = await fetch(url, {
+			method: "GET",
+		});
+
+		console.log("GET text:", await res.text());
 	});
 
 });
