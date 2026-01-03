@@ -1,6 +1,6 @@
 
 function authorizeRequest(request, env, key) {
-	return request.headers.get("X-Custom-Auth-Key") === env.`STORAGE_AUTH_KEY_SECRET`;
+	return request.headers.get("X-Custom-Auth-Key") === env.STORAGE_AUTH_KEY_SECRET;
 }
 
 export default {
